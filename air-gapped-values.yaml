@@ -1,0 +1,124 @@
+airgapped:
+  enabled: true
+  helmMirror:
+    image:
+      tag: -amd64
+certManager: false
+authorizedlister:
+  image:
+    tag: -amd64
+webhook:
+  image:
+    tag: -amd64
+bootstrapper:
+  containers:
+    manager:
+      image:
+        tag: -amd64
+controller:
+  containers:
+    manager:
+      image:
+        tag: -amd64
+fluxOperator:
+  containers:
+    manager:
+      image:
+        tag: -amd64
+gitrepository:
+  image:
+    tag: -amd64
+
+
+services:
+  centralizedMonitoring:
+    #enabled: true
+    enabled: false
+  monitoring:
+    enabled: false
+    prometheus:
+      storage:
+        spec:
+          resources:
+            storage: 100Gi
+      resources:
+        limits:
+          cpu: 2000m
+          memory: 10922Mi
+        requests:
+          cpu: 1000m
+          memory: 4000Mi
+    grafana:
+      resources:
+        limits:
+          cpu: 300m
+          memory: 100Mi
+        requests:
+          cpu: 200m
+          memory: 100Mi
+    alertmanager:
+      resources:
+        limits:
+          cpu: 200m
+          memory: 250Mi
+        requests:
+          cpu: 100m
+          memory: 200Mi
+  istio:
+    enabled: false
+  kubecost:
+    enabled: false
+  gatekeeper:
+    enabled: false
+  metallb:
+    enabled: false
+  logging:
+    enabled: false
+    loggingOperatorLogging:
+      fluentd:
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 400Mi
+          requests:
+            cpu: 500m
+            memory: 100Mi
+        bufferStorageVolume:
+          pvc:
+            resources:
+              requests:
+                storage: 10Gi
+      fluentbit:
+        resources:
+          limits:
+            cpu: 700m
+            memory: 750Mi
+          requests:
+            cpu: 350m
+            memory: 350Mi
+    loggingOperator:
+      resources:
+        limits:
+          cpu: 1000m
+          memory: 512Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+  velero:
+    enabled: true
+    minio:
+      resources:
+        limits:
+          cpu: 750m
+          memory: 512Mi
+        requests:
+          cpu: 250m
+          memory: 256Mi
+      persistence:
+        size: 10Gi
+  external-dns:
+    enabled: false
+  nvidia:
+    enabled: false
+  kubetunnel:
+    enabled: false
