@@ -1,0 +1,206 @@
+airgapped:
+  enabled: false
+  helmMirror:
+    image:
+      repository: mesosphere/kommander2-helm-mirror
+      tag:
+      pullPolicy: IfNotPresent
+    env: {}
+    extraArgs: {}
+    resources:
+      limits:
+        cpu: 100m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 32Mi
+    securityContext: {}
+    service:
+      annotations: {}
+      type: ClusterIP
+      port: 80
+
+certificates:
+  selfSigned: true
+  ca:
+    issuer:
+      name:
+      kind: Issuer
+  issuer:
+    name:
+    kind: Issuer
+
+certManager: true
+
+initializer:
+  image: mesosphere/kubeaddons-addon-initializer
+  tag: v0.5.4
+
+gitrepository:
+  image:
+    repository: mesosphere/kommander2-git-repository
+    tag:
+    pullPolicy: IfNotPresent
+  persistence:
+    size: 250Mi
+    storageClass:
+
+kommander:
+  version:
+
+secrets:
+  create: true
+  name: dkp-credentials
+
+authorizedlister:
+  image:
+    repository: mesosphere/kommander2-federation-authorizedlister
+    tag:
+
+controller:
+  containers:
+    manager:
+      image:
+        repository: mesosphere/kommander2-federation-controller-manager
+        tag:
+
+appmanagement:
+  containers:
+    manager:
+      image:
+        repository: mesosphere/kommander2-appmanagement
+        tag:
+
+webhook:
+  image:
+    repository: mesosphere/kommander2-federation-webhook
+    tag:
+
+fluxOperator:
+  containers:
+    manager:
+      image:
+        repository: mesosphere/kommander2-flux-operator
+        tag:
+
+licensing:
+  controller:
+    containers:
+      manager:
+        image:
+          repository: mesosphere/kommander2-licensing-controller-manager
+          tag:
+  webhook:
+    image:
+      repository: mesosphere/kommander2-licensing-webhook
+      tag:
+
+## common node selector for all the pods
+commonNodeSelector: {}
+#  key1: value1
+#  key2: value2
+
+## common tolerations for all the pods
+commonTolerations: []
+# - key: "key"
+#   operator: "Equal"
+#   value: "value"
+#   effect: "NoSchedule"
+
+kubetools:
+  image:
+    repository: mesosphere/kommander2-kubetools
+    tag:
+
+services:
+  centralizedMonitoring:
+    #enabled: true
+    enabled: false
+  monitoring:
+    enabled: false
+    prometheus:
+      storage:
+        spec:
+          resources:
+            storage: 100Gi
+      resources:
+        limits:
+          cpu: 2000m
+          memory: 10922Mi
+        requests:
+          cpu: 1000m
+          memory: 4000Mi
+    grafana:
+      resources:
+        limits:
+          cpu: 300m
+          memory: 100Mi
+        requests:
+          cpu: 200m
+          memory: 100Mi
+    alertmanager:
+      resources:
+        limits:
+          cpu: 200m
+          memory: 250Mi
+        requests:
+          cpu: 100m
+          memory: 200Mi
+  istio:
+    enabled: false
+  kubecost:
+    enabled: false
+  gatekeeper:
+    enabled: false
+  metallb:
+    enabled: false
+  logging:
+    enabled: false
+    loggingOperatorLogging:
+      fluentd:
+        resources:
+          limits:
+            cpu: 1000m
+            memory: 400Mi
+          requests:
+            cpu: 500m
+            memory: 100Mi
+        bufferStorageVolume:
+          pvc:
+            resources:
+              requests:
+                storage: 10Gi
+      fluentbit:
+        resources:
+          limits:
+            cpu: 700m
+            memory: 750Mi
+          requests:
+            cpu: 350m
+            memory: 350Mi
+    loggingOperator:
+      resources:
+        limits:
+          cpu: 1000m
+          memory: 512Mi
+        requests:
+          cpu: 100m
+          memory: 128Mi
+  velero:
+    enabled: true
+    minio:
+      resources:
+        limits:
+          cpu: 750m
+          memory: 512Mi
+        requests:
+          cpu: 250m
+          memory: 256Mi
+      persistence:
+        size: 10Gi
+  external-dns:
+    enabled: false
+  nvidia:
+    enabled: false
+  kubetunnel:
+    enabled: false
